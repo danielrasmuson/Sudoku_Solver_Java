@@ -1,0 +1,4 @@
+I learned to commit more on github
+
+Planning is really important, even if you thought your code was flexible
+    I should have thought of my constraint solution before I started coding
