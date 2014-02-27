@@ -30,6 +30,7 @@ public class run {
         //         System.out.println(square.getPossible());
         //     }
         // }
+        recurse(board.getStartingSquare(), board);
 
         
 
