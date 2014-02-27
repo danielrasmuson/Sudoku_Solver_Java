@@ -8,7 +8,6 @@ class Square {
     public int row;
     public int box;
     public Board parent;
-    public ArrayList<Integer> possible;
 
     public Square(Board parent, int number, int column, int row) {
         this.parent = parent;        
@@ -26,11 +25,6 @@ class Square {
         } else{
             return true;
         }
-    }
-    public void setConcrete(int num){
-        // sets the value and makes it concrete
-        this.setValue(num);
-        this.startingNum = num;
     }
     public boolean isBlank(){
         if (this.getValue() == 0){
@@ -85,8 +79,8 @@ class Square {
     }
     public void setValue(int value){
         // parent.setFarthest(this); // farthest is linear right now
-        // todo add changes possibilites to surronding cells
         this.currentValue = value;
+<<<<<<< HEAD
 
         // refresh possibilites with new value
         for (Square square : parent.squaresOne){
@@ -98,25 +92,28 @@ class Square {
                 if (square.getPossible().size())
             }
         }
+=======
+>>>>>>> parent of 027c106... Lots of work, not much success.
     }
-    public String setPossible(){
+    public ArrayList<Integer> getPossible(){
         ArrayList<Integer> hasNums = new ArrayList<Integer>();
 
-        // already has a value
         if (this.isBlank() == false){
-            this.possible = hasNums;
-            return ""; // todo dont need this return statment just sentienal value
+            return hasNums;
         }
 
         // loop through board finding similiar cells
+        int row = this.getRow();
+        int column = this.getColumn();
+        int box = this.getBox();
         for (Square square : parent.squaresOne){
-            if (square.getRow() == this.getRow()){
+            if (square.getRow() == row){
                 hasNums.add(square.getValue());
             }
-            else if(square.getColumn() == this.getColumn()){
+            else if(square.getColumn() == column){
                 hasNums.add(square.getValue());
             }
-            else if (square.getBox() == this.getBox()){
+            else if (square.getBox() == box){
                 hasNums.add(square.getValue());
             }
         }
@@ -128,17 +125,21 @@ class Square {
 
         // todo seems like there should be a way to better this
         int[] extraPossible = {1,2,3,4,5,6,7,8,9};
-        ArrayList<Integer> possiblites = new ArrayList<Integer>();
+        ArrayList<Integer> possible = new ArrayList<Integer>();
         for (int i = 0; i < extraPossible.length; i++){
             if (hasNums.indexOf(extraPossible[i]) == -1){
                 // extraPossible[i] = 0;
-                possiblites.add(extraPossible[i]);
+                possible.add(extraPossible[i]);
             }
         }
+<<<<<<< HEAD
         this.possible = possiblites;
         return "";
     }
     public ArrayList<Integer> getPossible(){
         return this.possible;
+=======
+        return possible;
+>>>>>>> parent of 027c106... Lots of work, not much success.
     }
 }

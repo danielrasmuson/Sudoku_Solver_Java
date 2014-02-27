@@ -4,21 +4,15 @@ import java.io.IOException;
 import java.util.*;
 public class run {
     public static void main(String[] args) {
-        // todo maybe I should have a refresh board taht looks for one and then sovles those to one and adds possiblites to squares
-
-
-
         // start timer
         long startTime = System.currentTimeMillis();
         long total = 0;
         for (int i = 0; i < 10000000; i++) {
             total += i;
         }
-        String[][] boardNumbers = getBoardFromFile("test2.txt");
-        Board board = new Board(boardNumbers); // this could speed me up by 8ms
-        System.out.println(board.printBoard());
 
         // main
+<<<<<<< HEAD
         // System.out.println(board.getSquare("d1").getName());
         board.initSquaresSolveOneSolutions(); // solving squares with only 1 possiblity
         // System.out.println(board.printBoard());
@@ -34,32 +28,35 @@ public class run {
 
         
 
+=======
+        String[][] boardNumbers = getBoardFromFile("test1.txt");
+        Board board = new Board(boardNumbers);
         System.out.println(board.printBoard());
-
+        // add in contraint searching
+        recurse(board.getStartingSquare(), board);
+>>>>>>> parent of 027c106... Lots of work, not much success.
+        System.out.println(board.printBoard());
 
         // end timer
         long stopTime = System.currentTimeMillis();
         long elapsedTime = stopTime - startTime;
         System.out.println("Milliseconds: "+elapsedTime);
-
     }
-    public static int recurse(Square square, Board board){
+    public static int recurse(Square square, Board b){
         // sentienal value
-        if (board.isLastSquare(square)){ //todo top right cell dynamic
+        if (square.getName().equals("i9")){ //todo top right cell dynamic
             square.setValue(square.getPossible().get(0));
             return 1; // solved
         }
 
         // recursion
         for (int possible : square.getPossible()){
+            // todo add fartherest variable so it doesnt loop throughr every square
+            b.resetAfterSquare(square); // jumped back
             if (possible > square.getValue()){
                 square.setValue(possible);
-                Square nSquare = board.nextSquare(square);
-                if (recurse(nSquare,board) == 1){
+                if (recurse(b.nextSquare(square),b) == 1){
                     return 1; // solved
-                }else{
-                    nSquare.setValue(0); // jumped back
-                    // some way to undo recursion
                 }
             }
         }

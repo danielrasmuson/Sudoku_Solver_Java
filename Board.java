@@ -1,16 +1,18 @@
 import java.util.*;
-import java.util.Arrays;
 class Board {
     // init objects
     private Square[][] squaresTwo; // two dimensional
     public Square[] squaresOne; // one dimensiaonl
+<<<<<<< HEAD
     public Square lastSquare;
+=======
+>>>>>>> parent of 027c106... Lots of work, not much success.
     // public Square farthestSquare;
 
     public Board(String[][] boardNumbers) {
         Square[][] squaresTwo = new Square[boardNumbers.length][boardNumbers.length];
         Square[] squaresOne = new Square[81]; // TODO change 81 to dynamic
-
+        // Square[64] squaresOne = new ArrayList();
         int counter = 0;
         for (int x = 0; x < boardNumbers.length; x++){
             for (int i = 0; i < boardNumbers[x].length; i++){
@@ -24,9 +26,9 @@ class Board {
                 counter += 1;
             }
         }
-        // todo better to just have one but lazy - little slower
         this.squaresTwo = squaresTwo;
         this.squaresOne = squaresOne;
+<<<<<<< HEAD
 
         // sets last square - the reason we cant just return i9 is because i9 might not be found by nextSquare
         outerloop:
@@ -44,6 +46,8 @@ class Board {
                 squaresTwo[x][i].setPossible();
             }
         }
+=======
+>>>>>>> parent of 027c106... Lots of work, not much success.
     }
     public Square getSquare(String coord){
         // should be passed like a1 --> bottom left corner (like chess)
@@ -123,13 +127,13 @@ class Board {
         // dont want to start on cell a1 if it is concrete
         for (int i = squaresTwo.length-1; i >= 0; i--){
             for (int x = 0; x < squaresTwo[i].length; x++){
-                if (squaresTwo[i][x].isConcrete() == false){
+                if (!(squaresTwo[x][i].isConcrete()))
                     return squaresTwo[i][x];
-                }
             }
         }
         return squaresOne[10000000]; // this will never happen to avoid error
     }
+<<<<<<< HEAD
     public boolean isLastSquare(Square square){
         if (square == this.lastSquare){
             return true;
@@ -164,6 +168,8 @@ class Board {
             }
         }
     }
+=======
+>>>>>>> parent of 027c106... Lots of work, not much success.
     public void resetAfterSquare(Square square){
         // resets every number after current square to 0
         // todo top left square
@@ -178,4 +184,25 @@ class Board {
             resetAfterSquare(nSquare);
         }
     }
+<<<<<<< HEAD
+=======
+    // public void setFarthest(Square square){
+    //     this.farthestSquare = square;
+    // }
+    // public boolean isFarthest(Square square){
+    //     if (square.getRow() < this.farthest.getRow()){
+    //         return false; // some other square has been farther
+    //     }else if (square.getRow() == this.farthest.getRow()){
+    //         if (square.getColumn() <= this.farthest.getColumn()){
+    //             return false;
+    //         }else{
+    //             this.farthest = square;
+    //             return true;
+    //         }
+    //     }else{
+    //         this.farthest = square;
+    //         return true; // it is the farthest
+    //     }
+    // }
+>>>>>>> parent of 027c106... Lots of work, not much success.
 }
