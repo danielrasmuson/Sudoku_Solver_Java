@@ -1,14 +1,18 @@
 import java.util.*;
+import java.util.Arrays;
 class Board {
     // init objects
     private Square[][] squaresTwo; // two dimensional
     public Square[] squaresOne; // one dimensiaonl
+    public ArrayList<ArrayList<Square>> boxes;
+    public Square lastSquare;
     // public Square farthestSquare;
 
     public Board(String[][] boardNumbers) {
+        // todo it would be better to have subclasses of this for box, column, square
         Square[][] squaresTwo = new Square[boardNumbers.length][boardNumbers.length];
         Square[] squaresOne = new Square[81]; // TODO change 81 to dynamic
-        // Square[64] squaresOne = new ArrayList();
+
         int counter = 0;
         for (int x = 0; x < boardNumbers.length; x++){
             for (int i = 0; i < boardNumbers[x].length; i++){
@@ -22,8 +26,36 @@ class Board {
                 counter += 1;
             }
         }
+        // todo better to just have one but lazy - little slower
         this.squaresTwo = squaresTwo;
         this.squaresOne = squaresOne;
+
+        // sets last square - the reason we cant just return i9 is because i9 might not be found by nextSquare
+        outerloop:
+        for (int i = 0; i < squaresTwo.length; i++){
+            for (int x = squaresTwo[i].length-1; x >= 0; x--){
+                if (!(squaresTwo[x][i].isConcrete()))
+                    this.lastSquare = squaresTwo[i][x];
+                    break outerloop;
+            }
+        }
+
+        setLoopBoxes();
+    }
+    public void setLoopBoxes(){
+        ArrayList<ArrayList<Square>> boxes = new ArrayList<ArrayList<Square>>();
+        // todo I can probably make this a anormal array of 9
+        // add onto the array list
+        for (int i = 0; i < 9; i++){
+            boxes.add(new ArrayList<Square>());
+        }
+
+        for (int i = 0; i < squaresTwo.length; i++){
+            for (int x = 0; x < squaresTwo[i].length; x++){
+                boxes.get(squaresTwo[i][x].getBox()).add(squaresTwo[i][x]);
+            }
+        }
+        this.boxes = boxes;
     }
     public Square getSquare(String coord){
         // should be passed like a1 --> bottom left corner (like chess)
@@ -103,11 +135,30 @@ class Board {
         // dont want to start on cell a1 if it is concrete
         for (int i = squaresTwo.length-1; i >= 0; i--){
             for (int x = 0; x < squaresTwo[i].length; x++){
-                if (!(squaresTwo[x][i].isConcrete()))
+                if (squaresTwo[i][x].isConcrete() == false){
                     return squaresTwo[i][x];
+                }
             }
         }
         return squaresOne[10000000]; // this will never happen to avoid error
+    }
+    public boolean isLastSquare(Square square){
+        if (square == this.lastSquare){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public void initSquaresSolveOneSolutions(){
+        // is possiblity is only one will set is as the solution and make it unchangable
+        // if anything was changed will return true
+        // loop through every square
+        // sets possible for each square, i cant set this tell all the squares are made
+        for (int x = 0; x < squaresTwo.length; x++){
+            for (int i = 0; i < squaresTwo[x].length; i++){
+                squaresTwo[x][i].setPossible();
+            }
+        }
     }
     public void resetAfterSquare(Square square){
         // resets every number after current square to 0
@@ -123,22 +174,45 @@ class Board {
             resetAfterSquare(nSquare);
         }
     }
-    // public void setFarthest(Square square){
-    //     this.farthestSquare = square;
-    // }
-    // public boolean isFarthest(Square square){
-    //     if (square.getRow() < this.farthest.getRow()){
-    //         return false; // some other square has been farther
-    //     }else if (square.getRow() == this.farthest.getRow()){
-    //         if (square.getColumn() <= this.farthest.getColumn()){
-    //             return false;
-    //         }else{
-    //             this.farthest = square;
-    //             return true;
+    // public void solveTwoSolution(){
+    //     // todo only checking boxes right now
+    //     // todo im hard coding this
+    //     // if the possiblity is shared between the other members in the square
+    //     // outerloop:
+
+    //     // LOL THIS IS HARD TO FOLLOW!
+    //     outerloop:
+    //     for (ArrayList<Square> box : this.boxes){
+    //         for (Square square1 : box){
+    //             for (Square square2 : box){
+    //                 if (square1.getPossible().equals(square2.getPossible()) && square1 != square2){
+    //                     for (Square square3 : box){
+    //                         if (square3.getValue() == 0){
+    //                             ArrayList<Integer> updatedPossible = new ArrayList<Integer>();
+    //                             for (int possible : square3.getPossible()){
+    //                                 if (!(square1.getPossible().contains(possible))){
+    //                                     updatedPossible.add(possible);
+    //                                 }
+    //                             }
+    //                             if (updatedPossible.size() > 0){
+    //                                 square3.possible = updatedPossible; //todo outside of loop
+    //                             }
+
+    //                             if (square3.getPossible().size() == 1){
+    //                                 square3.setValue(square3.getPossible().get(0));
+    //                             }
+    //                             System.out.println(square3.getName());
+    //                             System.out.println(square3.getValue());
+    //                             System.out.println(square1.getName());
+    //                             System.out.println(square1.getPossible());
+    //                             System.out.println(square2.getPossible());
+    //                             System.out.println(square3.getPossible());
+    //                             break outerloop;
+    //                         }
+    //                     }
+    //                 }
+    //             }
     //         }
-    //     }else{
-    //         this.farthest = square;
-    //         return true; // it is the farthest
     //     }
     // }
 }
