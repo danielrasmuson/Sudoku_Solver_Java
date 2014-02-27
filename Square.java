@@ -88,7 +88,6 @@ class Square {
         // todo add changes possibilites to surronding cells
         this.currentValue = value;
 
-        // automatically solves one solutions
         // refresh possibilites with new value
         for (Square square : parent.squaresOne){
             // todo add one more constraint to check to see if current possiblites hodl current value
@@ -96,9 +95,7 @@ class Square {
                 square.setPossible();
 
                 // no way to recurse now go back to 7:18
-                if (square.getPossible().size() == 1){
-                    square.setValue(square.getPossible().get(0));
-                }
+                if (square.getPossible().size())
             }
         }
     }
@@ -139,11 +136,6 @@ class Square {
             }
         }
         this.possible = possiblites;
-
-        // solves
-        if (possiblites.size() == 1){
-            this.setValue(possiblites.get(0));
-        }
         return "";
     }
     public ArrayList<Integer> getPossible(){

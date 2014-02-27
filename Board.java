@@ -4,12 +4,10 @@ class Board {
     // init objects
     private Square[][] squaresTwo; // two dimensional
     public Square[] squaresOne; // one dimensiaonl
-    public ArrayList<ArrayList<Square>> boxes;
     public Square lastSquare;
     // public Square farthestSquare;
 
     public Board(String[][] boardNumbers) {
-        // todo it would be better to have subclasses of this for box, column, square
         Square[][] squaresTwo = new Square[boardNumbers.length][boardNumbers.length];
         Square[] squaresOne = new Square[81]; // TODO change 81 to dynamic
 
@@ -40,22 +38,12 @@ class Board {
             }
         }
 
-        setLoopBoxes();
-    }
-    public void setLoopBoxes(){
-        ArrayList<ArrayList<Square>> boxes = new ArrayList<ArrayList<Square>>();
-        // todo I can probably make this a anormal array of 9
-        // add onto the array list
-        for (int i = 0; i < 9; i++){
-            boxes.add(new ArrayList<Square>());
-        }
-
-        for (int i = 0; i < squaresTwo.length; i++){
-            for (int x = 0; x < squaresTwo[i].length; x++){
-                boxes.get(squaresTwo[i][x].getBox()).add(squaresTwo[i][x]);
+        // sets possible for each square, i cant set this tell all the squares are made
+        for (int x = 0; x < squaresTwo.length; x++){
+            for (int i = 0; i < squaresTwo[x].length; i++){
+                squaresTwo[x][i].setPossible();
             }
         }
-        this.boxes = boxes;
     }
     public Square getSquare(String coord){
         // should be passed like a1 --> bottom left corner (like chess)
@@ -149,14 +137,30 @@ class Board {
             return false;
         }
     }
-    public void initSquaresSolveOneSolutions(){
+    public void setOneSolutions(Boolean isConcrete){
         // is possiblity is only one will set is as the solution and make it unchangable
         // if anything was changed will return true
-        // loop through every square
-        // sets possible for each square, i cant set this tell all the squares are made
-        for (int x = 0; x < squaresTwo.length; x++){
-            for (int i = 0; i < squaresTwo[x].length; i++){
-                squaresTwo[x][i].setPossible();
+        boolean changed = true;
+        while(changed){
+            changed = false;
+
+            // loop through every square
+            for (int i = squaresTwo.length-1; i >= 0; i--){
+                for (int x = 0; x < squaresTwo[i].length; x++){
+
+                    // if 1 possiblity fill it in
+                    Square square = squaresTwo[i][x];
+                    if (square.getValue() == 0){
+                        if (square.getPossible().size() == 1){
+                            if (isConcrete){ // at the start we can concrete them
+                                square.setConcrete(square.getPossible().get(0));
+                            }else{
+                                square.setValue(square.getPossible().get(0));
+                            }
+                            changed = true;
+                        }
+                    }
+                }
             }
         }
     }
@@ -174,45 +178,4 @@ class Board {
             resetAfterSquare(nSquare);
         }
     }
-    // public void solveTwoSolution(){
-    //     // todo only checking boxes right now
-    //     // todo im hard coding this
-    //     // if the possiblity is shared between the other members in the square
-    //     // outerloop:
-
-    //     // LOL THIS IS HARD TO FOLLOW!
-    //     outerloop:
-    //     for (ArrayList<Square> box : this.boxes){
-    //         for (Square square1 : box){
-    //             for (Square square2 : box){
-    //                 if (square1.getPossible().equals(square2.getPossible()) && square1 != square2){
-    //                     for (Square square3 : box){
-    //                         if (square3.getValue() == 0){
-    //                             ArrayList<Integer> updatedPossible = new ArrayList<Integer>();
-    //                             for (int possible : square3.getPossible()){
-    //                                 if (!(square1.getPossible().contains(possible))){
-    //                                     updatedPossible.add(possible);
-    //                                 }
-    //                             }
-    //                             if (updatedPossible.size() > 0){
-    //                                 square3.possible = updatedPossible; //todo outside of loop
-    //                             }
-
-    //                             if (square3.getPossible().size() == 1){
-    //                                 square3.setValue(square3.getPossible().get(0));
-    //                             }
-    //                             System.out.println(square3.getName());
-    //                             System.out.println(square3.getValue());
-    //                             System.out.println(square1.getName());
-    //                             System.out.println(square1.getPossible());
-    //                             System.out.println(square2.getPossible());
-    //                             System.out.println(square3.getPossible());
-    //                             break outerloop;
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 }
